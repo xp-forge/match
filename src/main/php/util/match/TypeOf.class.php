@@ -14,7 +14,13 @@ class TypeOf extends Match {
    * @return util.data.match.Condition
    */
   protected function conditionOf($arg) {
-    return null === $arg ? new IsEqual(null) : new IsInstance($arg);
+    if (null === $arg) {
+      return new IsEqual(null);
+    } else if ($arg instanceof Condition) {
+      return $arg;
+    } else {
+      return new IsInstance($arg);
+    }
   }
 
   /**
