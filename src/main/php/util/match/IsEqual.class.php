@@ -1,5 +1,7 @@
 <?php namespace util\match;
 
+use lang\Generic;
+
 /**
  * Uses equality comparison for the given value - which is defined as:
  *
