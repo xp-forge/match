@@ -1,9 +1,5 @@
 <?php namespace util\match;
 
-use lang\FunctionType;
-use lang\Generic;
-use util\Objects;
-
 /**
  * Uses equality comparison for the given value - which is defined as:
  *
@@ -12,18 +8,13 @@ use util\Objects;
  * 3. For maps, keys and values are compared to the same rule. Key order is not relevant.
  * 4. Otherwise, use the identity comparison operator, `===`.
  *
- * Optimizes the cases 1 and 4 and delegates 2 and 3 to the `util.Objects` class.
- *
- * @see   xp://util.Objects#equal
- * @test  xp://util.data.match.unittest.IsEqualTest
+ * @see   xp://util.match.IsEqualToPrimitive
+ * @see   xp://util.match.IsEqualToObject
+ * @see   xp://util.match.IsEqualToArray
+ * @test  xp://util.match.unittest.IsEqualTest
  */
 class IsEqual extends \lang\Object implements Condition {
-  private static $EQUALS;
-  private $compare;
-
-  static function __static() {
-    self::$EQUALS= FunctionType::forName('function(var): bool');
-  }
+  private $delegate;
 
   /**
    * Creates a new `IsEqual` condition.
@@ -32,11 +23,11 @@ class IsEqual extends \lang\Object implements Condition {
    */
   public function __construct($value) {
     if ($value instanceof Generic) {
-      $this->compare= self::$EQUALS->cast([$value, 'equals']);
+      $this->delegate= new IsEqualToObject($value);
     } else if (is_array($value)) {
-      $this->compare= function($cmp) use($value) { return Objects::equal($value, $cmp); };
+      $this->delegate= new IsEqualToArray($value);
     } else {
-      $this->compare= function($cmp) use($value) { return $value === $cmp; };
+      $this->delegate= new IsEqualToPrimitive($value);
     }
   }
 
@@ -47,6 +38,6 @@ class IsEqual extends \lang\Object implements Condition {
    * @return bool
    */
   public function matches($value) {
-    return $this->compare->__invoke($value);
+    return $this->delegate->matches($value);
   }
 }

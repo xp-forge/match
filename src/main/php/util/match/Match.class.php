@@ -52,7 +52,7 @@ abstract class Match extends \lang\Object {
    * @return self
    */
   public function when($condition, $function) {
-    $this->when[]= [$this->conditionOf($condition), self::$HANDLE->cast($function)];
+    $this->when[]= new Conditional($this->conditionOf($condition), self::$HANDLE->cast($function));
     return $this;
   }
 
@@ -79,17 +79,22 @@ abstract class Match extends \lang\Object {
    */
   public function __invoke($value) {
     if ($this->map) {
-      $expr= $this->map->__invoke($value);
+      $f= $this->map;
+      $expr= $f($value);
     } else {
       $expr= $value;
     }
 
     foreach ($this->when as $when) {
-      if ($when[0]->matches($expr)) return $when[1]->__invoke($value, $this);
+      if ($when->condition->matches($expr)) {
+        $f= $when->handle;
+        return $f($value, $this);
+      }
     }
 
     if ($this->otherwise) {
-      return $this->otherwise->__invoke($value);
+      $f= $this->otherwise;
+      return $f($value);
     } else {
       throw new IllegalArgumentException($this->unhandledMessage($expr));
     }
