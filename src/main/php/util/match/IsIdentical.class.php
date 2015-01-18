@@ -3,7 +3,7 @@
 /**
  * Uses `===`
  */
-class IsEqualToPrimitive extends \lang\Object implements Condition {
+class IsIdentical extends \lang\Object implements Condition {
   private $value;
 
   /**

@@ -29,7 +29,7 @@ class IsEqual extends \lang\Object implements Condition {
     } else if (is_array($value)) {
       $this->delegate= new IsEqualToArray($value);
     } else {
-      $this->delegate= new IsEqualToPrimitive($value);
+      $this->delegate= new IsIdentical($value);
     }
   }
 
