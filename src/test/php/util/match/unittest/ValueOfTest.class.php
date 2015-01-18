@@ -18,8 +18,8 @@ class ValueOfTest extends \unittest\TestCase {
   #[@test]
   public function wording_for_numbers() {
     $match= (new ValueOf())
-      ->when(0, function($value) { return 'No elements'; })
-      ->when(1, function($value) { return 'One element'; })
+      ->when(0, function() { return 'No elements'; })
+      ->when(1, function() { return 'One element'; })
       ->otherwise(function($value) { return $value.' elements'; })
     ;
 
