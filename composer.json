@@ -9,6 +9,10 @@
     "xp-framework/core": "dev-master",
     "php" : ">=5.4.0"
   },
+  "require-dev" : {
+    "xp-forge/measure": "dev-master"
+
+  },
   "autoload" : {
     "files" : ["src/main/php/autoload.php"]
   }
