@@ -1,13 +1,20 @@
 <?php namespace util\match\unittest;
 
 use util\match\ValueOf;
+use util\match\KeyOf;
 
 class ValueOfPerformance extends \util\profiling\Measurable {
-  private $match, $if, $switch;
+  private $value, $key, $if, $switch;
 
   public function __construct($method, $args) {
     parent::__construct($method, $args);
-    $this->match= (new ValueOf())
+    $this->value= (new ValueOf())
+      ->when(0, function() { return 'No elements'; })
+      ->when(1, function() { return 'One element'; })
+      ->otherwise(function($value) { return $value.' elements'; })
+    ;
+
+    $this->key= (new KeyOf())
       ->when(0, function() { return 'No elements'; })
       ->when(1, function() { return 'One element'; })
       ->otherwise(function($value) { return $value.' elements'; })
@@ -36,8 +43,14 @@ class ValueOfPerformance extends \util\profiling\Measurable {
   public static function values() { return [0, 1, 2, 100]; }
 
   #[@measure, @values('values')]
-  public function match($value) {
-    $f= $this->match;
+  public function value_match($value) {
+    $f= $this->value;
+    return $f($value);
+  }
+
+  #[@measure, @values('values')]
+  public function key_match($value) {
+    $f= $this->key;
     return $f($value);
   }
 
