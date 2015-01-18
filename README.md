@@ -31,7 +31,7 @@ Unhandled values
 To handle the default case, use the `otherwise()` method:
 
 ```php
-$match= (new ValueOf())
+$match= (new KeyOf())
   ->when(0, function() { return 'No elements'; })
   ->when(1, function() { return 'One element'; })
   ->otherwise(function($value) { return $value.' elements'; })
@@ -41,6 +41,8 @@ $display= $match(0);  // "No elements"
 $display= $match(1);  // "One element"
 $display= $match(2);  // "2 elements"
 ```
+
+They `KeyOf` class is a high-performance alternative to the `ValueOf` class although it's restricted to integers and strings (it uses them as keys in its backing map).
 
 Matching types
 --------------
