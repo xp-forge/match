@@ -10,8 +10,8 @@ use lang\IllegalArgumentException;
  * @see   xp://util.data.match.TypeOf
  */
 abstract class Match extends \lang\Object {
-  private static $MAP, $HANDLE;
-  private $map, $when= [], $otherwise= null;
+  protected static $MAP, $HANDLE;
+  protected $mapping, $otherwise= null;
 
   static function __static() {
     self::$MAP= FunctionType::forName('function(var): var');
@@ -25,24 +25,8 @@ abstract class Match extends \lang\Object {
    * @param  function(var): var $map
    */
   public function __construct($map= null) {
-    $this->map= self::$MAP->cast($map);
+    $this->mapping= self::$MAP->cast($map);
   }
-
-  /**
-   * Creates a condition for a given argument
-   *
-   * @param  var $arg
-   * @return util.data.match.Condition
-   */
-  protected abstract function conditionOf($arg);
-
-  /**
-   * Returns message for exception when the given argument is unhandled
-   *
-   * @param  var $arg
-   * @return string
-   */
-  protected abstract function unhandledMessage($arg);
 
   /**
    * Define handler for a given condition
@@ -51,10 +35,7 @@ abstract class Match extends \lang\Object {
    * @param  function(?): var $function
    * @return self
    */
-  public function when($condition, $function) {
-    $this->when[]= new Conditional($this->conditionOf($condition), self::$HANDLE->cast($function));
-    return $this;
-  }
+  public abstract function when($condition, $function);
 
   /**
    * Define handler for default case
@@ -77,26 +58,5 @@ abstract class Match extends \lang\Object {
    * @return var
    * @throws lang.IllegalArgumentException
    */
-  public function __invoke($value) {
-    if ($this->map) {
-      $f= $this->map;
-      $expr= $f($value);
-    } else {
-      $expr= $value;
-    }
-
-    foreach ($this->when as $when) {
-      if ($when->condition->matches($expr)) {
-        $f= $when->handle;
-        return $f($value, $this);
-      }
-    }
-
-    if ($this->otherwise) {
-      $f= $this->otherwise;
-      return $f($value);
-    } else {
-      throw new IllegalArgumentException($this->unhandledMessage($expr));
-    }
-  }
+  public abstract function __invoke($value);
 }

@@ -1,35 +1,67 @@
 <?php namespace util\match;
 
+use lang\IllegalArgumentException;
+
 /**
  * @test  xp://util.data.match.unittest.TypeOfTest
  */
 class TypeOf extends Match {
+  private $null= null, $types= [];
 
   static function __static() { }
 
   /**
-   * Creates a condition for a given argument
+   * Define handler for a given condition
    *
-   * @param  var $arg
-   * @return util.data.match.Condition
+   * @param  var $type
+   * @param  function(?): var $function
+   * @return self
    */
-  protected function conditionOf($arg) {
-    if (null === $arg) {
-      return new IsEqual(null);
-    } else if ($arg instanceof Condition) {
-      return $arg;
+  public function when($type, $function) {
+    if (null === $type) {
+      $this->null= $function;
     } else {
-      return new IsInstance($arg);
+      $this->types[]= new Conditional(new IsInstance($type), self::$HANDLE->cast($function));
     }
+    return $this;
   }
 
   /**
-   * Returns message for exception when the given argument is unhandled
+   * Invoke match. Returns the handler's result for the first condition to 
+   * match the given value. If no condition matched and no default handler
+   * was installed, an exception is raised.
    *
-   * @param  var $arg
-   * @return string
+   * @param  var $value
+   * @return var
+   * @throws lang.IllegalArgumentException
    */
-  protected function unhandledMessage($arg) {
-    return 'Unhandled type '.\xp::typeOf($arg);
+  public function __invoke($value) {
+    if ($this->mapping) {
+      $f= $this->mapping;
+      $expr= $f($value);
+    } else {
+      $expr= $value;
+    }
+
+    if (null === $value) {
+      if ($this->null) {
+        $f= $this->null;
+        return $f($value, $this);
+      }
+    } else {
+      foreach ($this->types as $conditional) {
+        if ($conditional->condition->matches($expr)) {
+          $f= $conditional->handle;
+          return $f($value, $this);
+        }
+      }
+    }
+
+    if ($this->otherwise) {
+      $f= $this->otherwise;
+      return $f($value);
+    } else {
+      throw new IllegalArgumentException('Unhandled type '.\xp::typeOf($expr));
+    }
   }
 }

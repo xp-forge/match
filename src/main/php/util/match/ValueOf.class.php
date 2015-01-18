@@ -1,29 +1,59 @@
 <?php namespace util\match;
 
+use lang\IllegalArgumentException;
+
 /**
  * @test  xp://util.data.match.unittest.ValueOfTest
  */
 class ValueOf extends Match {
+  private $conditionals= [];
 
   static function __static() { }
 
   /**
-   * Creates a condition for a given argument
+   * Define handler for a given condition
    *
-   * @param  var $arg
-   * @return util.data.match.Condition
+   * @param  var $condition
+   * @param  function(?): var $function
+   * @return self
    */
-  protected function conditionOf($arg) {
-    return $arg instanceof Condition ? $arg : new IsEqual($arg);
+  public function when($condition, $function) {
+    $this->conditionals[]= new Conditional(
+      $condition instanceof Condition ? $condition : new IsEqual($condition),
+      self::$HANDLE->cast($function)
+    );
+    return $this;
   }
 
   /**
-   * Returns message for exception when the given argument is unhandled
+   * Invoke match. Returns the handler's result for the first condition to 
+   * match the given value. If no condition matched and no default handler
+   * was installed, an exception is raised.
    *
-   * @param  var $arg
-   * @return string
+   * @param  var $value
+   * @return var
+   * @throws lang.IllegalArgumentException
    */
-  protected function unhandledMessage($arg) {
-    return 'Unhandled condition '.\xp::stringOf($arg);
+  public function __invoke($value) {
+    if ($this->mapping) {
+      $f= $this->mapping;
+      $expr= $f($value);
+    } else {
+      $expr= $value;
+    }
+
+    foreach ($this->conditionals as $conditional) {
+      if ($conditional->condition->matches($expr)) {
+        $f= $conditional->handle;
+        return $f($value, $this);
+      }
+    }
+
+    if ($this->otherwise) {
+      $f= $this->otherwise;
+      return $f($value);
+    } else {
+      throw new IllegalArgumentException('Unhandled value '.\xp::stringOf($expr));
+    }
   }
 }
