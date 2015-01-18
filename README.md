@@ -47,9 +47,9 @@ The following is a reimplementation of PHP's [serialize](http://php.net/serializ
 
 ```php
 $match= (new TypeOf())
-  ->when('int', function($value) { return 'i:'.$value.';'; })
-  ->when('string', function($value) { return 's:'.strlen($value).':"'.$value.'";'; })
-  ->when('var[]', function($value, $self) {
+  ->when(Primitive::$INT, function($value) { return 'i:'.$value.';'; })
+  ->when(Primitive::$STRING, function($value) { return 's:'.strlen($value).':"'.$value.'";'; })
+  ->when(Type::$ARRAY, function($value, $self) {
     $r= 'a:'.sizeof($value).':{';
     foreach ($value as $key => $val) {
       $r.= $self($key).$self($val);
