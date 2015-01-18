@@ -65,3 +65,10 @@ $serialized= $serialize("Test");  // `s:4:"Test";`
 $serialized= $serialize([1, 2]);  // `a:2:{i:0;i:1;i:1;i:2;}`
 $serialized= $serialize(null);    // `N;`
 ```
+
+Further reading
+---------------
+This library was inspired by Scala's patter matching.
+
+* [Scala Tour: Pattern Matching](http://docs.scala-lang.org/tutorials/tour/pattern-matching.html)
+* [Instanceof operator and Visitor pattern replacement in Java 8](http://www.nurkiewicz.com/2013/09/instanceof-operator-and-visitor-pattern.html)
