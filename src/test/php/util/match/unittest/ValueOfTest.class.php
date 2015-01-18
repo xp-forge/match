@@ -42,7 +42,7 @@ class ValueOfTest extends \unittest\TestCase {
     );
   }
 
-  #[@test, @expect(class= IllegalArgumentException::class, withMessage= 'Unhandled condition "Test"')]
+  #[@test, @expect(class= IllegalArgumentException::class, withMessage= 'Unhandled value "Test"')]
   public function unhandled() {
     $match= new ValueOf();
     $match('Test');
