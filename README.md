@@ -63,7 +63,7 @@ $match= (new TypeOf())
 ;
 
 $serialized= $serialize(1);       // `i:1;`
-$serialized= $serialize("Test");  // `s:4:"Test";`
+$serialized= $serialize('Test');  // `s:4:"Test";`
 $serialized= $serialize([1, 2]);  // `a:2:{i:0;i:1;i:1;i:2;}`
 $serialized= $serialize(null);    // `N;`
 ```
