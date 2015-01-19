@@ -34,7 +34,7 @@ To handle the default case, use the `otherwise()` method:
 $match= (new ValueOf('Group::type'))
   ->when(Types::$OPEN, function($group) { return $group->name(); })
   ->when(Types::$CLOSED, function($group) { return $group->name().' 🔒'; })
-  ->otherwise(function($value) { $group->name().' ('.$group->type()->name().')'; })
+  ->otherwise(function($group) { return $group->name().' ('.$group->type()->name().')'; })
 ;
 ```
 
