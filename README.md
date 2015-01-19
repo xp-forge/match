@@ -43,14 +43,14 @@ Matching values
 For the special case of testing equality, we can use the specialized `ValueOf` matcher:
 
 ```php
-$match= (new ValueOf('Event::weekday'))
+$kind= (new ValueOf('Event::weekday'))
   ->when(Day::$SATURDAY, function() { return 'Weekend'; })
   ->when(Day::$SUNDAY, function() { return 'Weekend'; })
   ->otherwise(function() { return 'During the week'; })
 ;
 
-$display= $match(new Event('Relax', new Date('2015-01-18')));    // `Weekend`
-$display= $match(new Event('Meeting', new Date('2015-01-19')));  // `During the week`
+$display= $kind(new Event('Relax', new Date('2015-01-18')));    // `Weekend`
+$display= $kind(new Event('Meeting', new Date('2015-01-19')));  // `During the week`
 ```
 
 Matching types
@@ -58,7 +58,7 @@ Matching types
 The following is a reimplementation of PHP's [serialize](http://php.net/serialize) function (incomplete, but you get the idea):
 
 ```php
-$match= (new TypeOf())
+$serialize= (new TypeOf())
   ->when(Primitive::$INT, function($value) { return 'i:'.$value.';'; })
   ->when(Primitive::$STRING, function($value) { return 's:'.strlen($value).':"'.$value.'";'; })
   ->when(Type::$ARRAY, function($value, $self) {
