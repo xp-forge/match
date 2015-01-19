@@ -25,3 +25,4 @@ before_script:
 script:
   - ./unittest src/test/php
   - ./xp util.profiling.Measure util.match.unittest.NumberMatchingPerformance -n 50000
+  - ./xp util.profiling.Measure util.match.unittest.SerializationUsecasePerformance -n 50000
