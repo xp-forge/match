@@ -98,10 +98,10 @@ Using 500000 iterations, PHP 5.4 / Windows 8.1:
 
 | *Invocation*  | *Result*         | *Native if* | *KeyOf class*      | *ValueOf class*   |
 | ------------- | ---------------- | ----------: | -----------------: | ----------------: |
-| `$match(0)`   | `"No elements"`  | 0.283 secs  | 0.386 secs (1.36x) | 0.566 secs (2.0x) |
-| `$match(1)`   | `"One element"`  | 0.287 secs  | 0.385 secs (1.34x) | 0.750 secs (2.6x) |
-| `$match(2)`   | `"2 elements"`   | 0.386 secs  | 0.500 secs (1.29x) | 0.882 secs (2.3x) |
-| `$match(100)` | `"100 elements"` | 0.383 secs  | 0.524 secs (1.37x) | 0.900 secs (2.3x) |
+| `$match(0)`   | `"No elements"`  | 0.283 secs  | 0.386 secs (1.36x) | 0.566 secs (2.00x) |
+| `$match(1)`   | `"One element"`  | 0.287 secs  | 0.385 secs (1.34x) | 0.750 secs (2.61x) |
+| `$match(2)`   | `"2 elements"`   | 0.386 secs  | 0.500 secs (1.29x) | 0.882 secs (2.28x) |
+| `$match(100)` | `"100 elements"` | 0.383 secs  | 0.524 secs (1.37x) | 0.900 secs (2.35x) |
 
 
 
