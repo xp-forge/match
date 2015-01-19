@@ -3,9 +3,9 @@
 use lang\IllegalArgumentException;
 
 /**
- * @test  xp://util.data.match.unittest.ValueOfTest
+ * @test  xp://util.data.match.unittest.MatchTest
  */
-class ValueOf extends Expression {
+class Match extends Expression {
   private $conditionals= [];
 
   static function __static() { }
@@ -13,12 +13,12 @@ class ValueOf extends Expression {
   /**
    * Define handler for a given condition
    *
-   * @param  var $condition
+   * @param  util.data.Condition $condition
    * @param  function(?): var $function
    * @return self
    */
   public function when($condition, $function) {
-    $this->conditionals[]= new Conditional(new IsEqual($condition), self::$HANDLE->cast($function));
+    $this->conditionals[]= new Conditional($condition, self::$HANDLE->cast($function));
     return $this;
   }
 

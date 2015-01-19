@@ -10,15 +10,15 @@ Matching DSL
 
 Fluent API for matching.
 
-Matching values
----------------
+Matching
+--------
 The following outputs two lines, *My Team 🔒* and *Developers*:
 
 ```php
 Sequence::of([new Group('My Team', Types::$CLOSED), new Group('Developers', Types::$OPEN)])
   ->map((new ValueOf('Group::type'))
-    ->when(Types::$OPEN, function($group) { return $group->name(); })
-    ->when(Types::$CLOSED, function($group) { return $group->name().' 🔒'; })
+    ->when(new IsEqual(Types::$OPEN), function($group) { return $group->name(); })
+    ->when(new IsEqual(Types::$CLOSED), function($group) { return $group->name().' 🔒'; })
   )
   ->each('util.cmd.Console::writeLine')
 ;
@@ -32,10 +32,25 @@ To handle the default case, use the `otherwise()` method:
 
 ```php
 $match= (new ValueOf('Group::type'))
-  ->when(Types::$OPEN, function($group) { return $group->name(); })
-  ->when(Types::$CLOSED, function($group) { return $group->name().' 🔒'; })
+  ->when(new IsEqual(Types::$OPEN), function($group) { return $group->name(); })
+  ->when(new IsEqual(Types::$CLOSED), function($group) { return $group->name().' 🔒'; })
   ->otherwise(function($group) { return $group->name().' ('.$group->type()->name().')'; })
 ;
+```
+
+Matching values
+---------------
+For the special case of testing equality, we can use the specialized `ValueOf` matcher:
+
+```php
+$match= (new ValueOf('Event::weekday'))
+  ->when(Day::$SATURDAY, function() { return 'Weekend'; })
+  ->when(Day::$SUNDAY, function() { return 'Weekend'; })
+  ->otherwise(function() { return 'During the week'; })
+;
+
+$display= $match(new Event('Relax', new Date('2015-01-18')));    // `Weekend`
+$display= $match(new Event('Meeting', new Date('2015-01-19')));  // `During the week`
 ```
 
 Matching types
