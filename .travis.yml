@@ -24,4 +24,4 @@ before_script:
 
 script:
   - ./unittest src/test/php
-  - ./xp util.profiling.Measure util.match.unittest.MatchPerformance -n 500000
+  - ./xp util.profiling.Measure util.match.unittest.MatchPerformance -n 50000
