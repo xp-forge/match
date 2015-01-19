@@ -62,6 +62,8 @@ $serialized= $serialize([1, 2]);  // `a:2:{i:0;i:1;i:1;i:2;}`
 $serialized= $serialize(null);    // `N;`
 ```
 
+The `Type::$ARRAY` is actually a type union consisting of zero-indexed arrays and maps, both of which are known to PHP as an `array` (in contrast, the XP Framework only speaks of the first as arrays). We use it here for performance reasons since we don't need to distinguish between the two anyways.
+
 Performance
 -----------
 They `KeyOf` class is a high-performance alternative to the `ValueOf` class although it's restricted to integers and strings (it uses them as keys in its backing map).
