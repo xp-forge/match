@@ -84,16 +84,25 @@ $match= (new KeyOf())
   ->when(1, function() { return 'One element'; })
   ->otherwise(function($value) { return $value.' elements'; })
 ;
+
+// Using ValueOf class
+$match= (new ValueOf())
+  ->when(0, function() { return 'No elements'; })
+  ->when(1, function() { return 'One element'; })
+  ->otherwise(function($value) { return $value.' elements'; })
+;
+
 ```
 
 Using 500000 iterations, PHP 5.4 / Windows 8.1:
 
-| *Invocation*  | *Result*         | *Native if*   | *KeyOf class* | *Factor* |
-| ------------- | ---------------- | ------------: | ------------: | -------: |
-| `$match(0)`   | `"No elements"`  | 0.283 seconds | 0.386 seconds | 1.36     |
-| `$match(1)`   | `"One element"`  | 0.287 seconds | 0.385 seconds | 1.34     |
-| `$match(2)`   | `"2 elements"`   | 0.386 seconds | 0.500 seconds | 1.29     |
-| `$match(100)` | `"100 elements"` | 0.383 seconds | 0.524 seconds | 1.37     |
+| *Invocation*  | *Result*         | *Native if* | *KeyOf class*      | *ValueOf class*   |
+| ------------- | ---------------- | ----------: | -----------------: | ----------------: |
+| `$match(0)`   | `"No elements"`  | 0.283 secs  | 0.386 secs (1.36x) | 0.566 secs (2.0x) |
+| `$match(1)`   | `"One element"`  | 0.287 secs  | 0.385 secs (1.34x) | 0.750 secs (2.6x) |
+| `$match(2)`   | `"2 elements"`   | 0.386 secs  | 0.500 secs (1.29x) | 0.882 secs (2.3x) |
+| `$match(100)` | `"100 elements"` | 0.383 secs  | 0.524 secs (1.37x) | 0.900 secs (2.3x) |
+
 
 
 Further reading
