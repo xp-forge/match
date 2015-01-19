@@ -3,7 +3,7 @@
 use util\match\ValueOf;
 use util\match\KeyOf;
 
-class MatchPerformance extends \util\profiling\Measurable {
+class NumberMatchingPerformance extends \util\profiling\Measurable {
   private $value, $key, $if, $switch;
 
   public function __construct($method, $args) {
