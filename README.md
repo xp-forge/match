@@ -31,18 +31,12 @@ Unhandled values
 To handle the default case, use the `otherwise()` method:
 
 ```php
-$match= (new KeyOf())
-  ->when(0, function() { return 'No elements'; })
-  ->when(1, function() { return 'One element'; })
-  ->otherwise(function($value) { return $value.' elements'; })
+$match= (new ValueOf('Group::type'))
+  ->when(Types::$OPEN, function($group) { return $group->name(); })
+  ->when(Types::$CLOSED, function($group) { return $group->name().' 🔒'; })
+  ->otherwise(function($value) { $group->name().' ('.$group->type()->name().')'; })
 ;
-
-$display= $match(0);  // "No elements"
-$display= $match(1);  // "One element"
-$display= $match(2);  // "2 elements"
 ```
-
-They `KeyOf` class is a high-performance alternative to the `ValueOf` class although it's restricted to integers and strings (it uses them as keys in its backing map).
 
 Matching types
 --------------
@@ -67,6 +61,40 @@ $serialized= $serialize('Test');  // `s:4:"Test";`
 $serialized= $serialize([1, 2]);  // `a:2:{i:0;i:1;i:1;i:2;}`
 $serialized= $serialize(null);    // `N;`
 ```
+
+Performance
+-----------
+They `KeyOf` class is a high-performance alternative to the `ValueOf` class although it's restricted to integers and strings (it uses them as keys in its backing map).
+
+```php
+// Using native if and comparison
+$match= function($value) {
+  if (0 === $value) {
+    return 'No elements';
+  } else if (1 === $value) {
+    return 'One element';
+  } else {
+    return $value.' elements';
+  }
+};
+
+// Using KeyOf class
+$match= (new KeyOf())
+  ->when(0, function() { return 'No elements'; })
+  ->when(1, function() { return 'One element'; })
+  ->otherwise(function($value) { return $value.' elements'; })
+;
+```
+
+Using 500000 iterations, PHP 5.4 / Windows 8.1:
+
+| *Invocation*  | *Result*         | *Native if*   | *KeyOf class* | *Factor* |
+| ------------- | ---------------- | ------------: | ------------: | -------: |
+| `$match(0)`   | `"No elements"`  | 0.283 seconds | 0.386 seconds | 1.36     |
+| `$match(1)`   | `"One element"`  | 0.287 seconds | 0.385 seconds | 1.34     |
+| `$match(2)`   | `"2 elements"`   | 0.386 seconds | 0.500 seconds | 1.29     |
+| `$match(100)` | `"100 elements"` | 0.383 seconds | 0.524 seconds | 1.37     |
+
 
 Further reading
 ---------------
