@@ -3,6 +3,8 @@ Match DSL ChangeLog
 
 ## ?.?.? / ????-??-??
 
+## 0.1.0 / 2015-01-19
+
 * Improved performance of type lookups by adding special case handling
   for primitives to the `util.match.TypeOf` class.
   (@thekid) 
