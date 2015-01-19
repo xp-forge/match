@@ -4,12 +4,12 @@ use lang\FunctionType;
 use lang\IllegalArgumentException;
 
 /**
- * Match base class
+ * Match expression base class
  *
  * @see   xp://util.data.match.ValueOf
  * @see   xp://util.data.match.TypeOf
  */
-abstract class Match extends \lang\Object {
+abstract class Expression extends \lang\Object {
   protected static $MAP, $HANDLE;
   protected $mapping, $otherwise= null;
 

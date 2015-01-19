@@ -5,7 +5,7 @@ use lang\IllegalArgumentException;
 /**
  * @test  xp://util.data.match.unittest.ValueOfTest
  */
-class ValueOf extends Match {
+class ValueOf extends Expression {
   private $conditionals= [];
 
   static function __static() { }

@@ -5,7 +5,7 @@ use lang\IllegalArgumentException;
 /**
  * @test  xp://util.data.match.unittest.TypeOfTest
  */
-class TypeOf extends Match {
+class TypeOf extends Expression {
   private $null= null, $types= [];
 
   static function __static() { }

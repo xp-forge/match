@@ -5,7 +5,7 @@ use lang\IllegalArgumentException;
 /**
  * @test  xp://util.data.match.unittest.KeyOfTest
  */
-class KeyOf extends Match {
+class KeyOf extends Expression {
   private $hash= [];
 
   static function __static() { }
