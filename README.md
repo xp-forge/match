@@ -59,7 +59,7 @@ $match= (new TypeOf())
     }
     return $r.'}';
   })
-  ->when(null, function($value) { return 'N;'; })
+  ->when(null, function() { return 'N;'; })
 ;
 
 $serialized= $serialize(1);       // `i:1;`
