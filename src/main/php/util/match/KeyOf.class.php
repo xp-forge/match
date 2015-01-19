@@ -47,7 +47,7 @@ class KeyOf extends Match {
       return $this->hash[$expr]($value, $this);
     } else if ($this->otherwise) {
       $f= $this->otherwise;
-      return $f($value);
+      return $f($value, $this);
     } else {
       throw new IllegalArgumentException('Unhandled key '.\xp::stringOf($expr));
     }

@@ -51,7 +51,7 @@ class ValueOf extends Match {
 
     if ($this->otherwise) {
       $f= $this->otherwise;
-      return $f($value);
+      return $f($value, $this);
     } else {
       throw new IllegalArgumentException('Unhandled value '.\xp::stringOf($expr));
     }
