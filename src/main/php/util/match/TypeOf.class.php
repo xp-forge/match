@@ -1,27 +1,41 @@
 <?php namespace util\match;
 
 use lang\IllegalArgumentException;
+use lang\Type;
 
 /**
  * @test  xp://util.data.match.unittest.TypeOfTest
  */
 class TypeOf extends Expression {
-  private $null= null, $types= [];
+  private static $GETTYPE= [
+    'int'    => 'integer',
+    'double' => 'double',
+    'array'  => 'array',
+    'string' => 'string',
+    'bool'   => 'boolean'
+  ];
+  private $instance= [], $primitive= [];
 
   static function __static() { }
 
   /**
    * Define handler for a given condition
    *
-   * @param  var $type
+   * @param  var $type Either NULL, a string type reference or a `lang.Type` instance.
    * @param  function(?): var $function
    * @return self
    */
   public function when($type, $function) {
     if (null === $type) {
-      $this->null= $function;
+      $this->primitive[null]= self::$HANDLE->cast($function);
     } else {
-      $this->types[]= new Conditional(new IsInstance($type), self::$HANDLE->cast($function));
+      $t= $type instanceof Type ? $type : Type::forName($type);
+      $name= $t->getName();
+      if (isset(self::$GETTYPE[$name])) {
+        $this->primitive[self::$GETTYPE[$name]]= self::$HANDLE->cast($function);
+      } else {
+        $this->instance[]= new Conditional(new IsInstance($t), self::$HANDLE->cast($function));
+      }
     }
     return $this;
   }
@@ -43,13 +57,16 @@ class TypeOf extends Expression {
       $expr= $value;
     }
 
-    if (null === $value) {
-      if ($this->null) {
-        $f= $this->null;
-        return $f($value, $this);
-      }
+    if (null === $expr) {
+      $type= null;
     } else {
-      foreach ($this->types as $conditional) {
+      $type= gettype($expr);
+    }
+
+    if (isset($this->primitive[$type])) {
+      return $this->primitive[$type]($value, $this);
+    } else {
+      foreach ($this->instance as $conditional) {
         if ($conditional->condition->matches($expr)) {
           $f= $conditional->handle;
           return $f($value, $this);

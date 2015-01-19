@@ -37,6 +37,21 @@ class TypeOfTest extends \unittest\TestCase {
     );
   }
 
+  #[@test, @values(['lang.Object', 'lang.Generic', parent::class, self::class])]
+  public function an_instance($type) {
+    $match= (new TypeOf())->when($type, function() { return 'An object!'; });
+    $this->assertEquals('An object!', $match($this));
+  }
+
+  #[@test]
+  public function not_an_instance() {
+    $match= (new TypeOf())
+      ->when('lang.Object', function() { return 'An object!'; })
+      ->otherwise(function() { return 'Unfortunately not.'; })
+    ;
+    $this->assertEquals('Unfortunately not.', $match(1));
+  }
+
   #[@test, @expect(class= IllegalArgumentException::class, withMessage= 'Unhandled type string')]
   public function unhandled() {
     $type= new TypeOf();
