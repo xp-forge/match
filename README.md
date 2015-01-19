@@ -16,7 +16,7 @@ The following outputs two lines, *My Team 🔒* and *Developers*:
 
 ```php
 Sequence::of([new Group('My Team', Types::$CLOSED), new Group('Developers', Types::$OPEN)])
-  ->map((new ValueOf('Group::type'))
+  ->map((new Match('Group::type'))
     ->when(new IsEqual(Types::$OPEN), function($group) { return $group->name(); })
     ->when(new IsEqual(Types::$CLOSED), function($group) { return $group->name().' 🔒'; })
   )
@@ -31,7 +31,7 @@ Unhandled values
 To handle the default case, use the `otherwise()` method:
 
 ```php
-$match= (new ValueOf('Group::type'))
+$match= (new Match('Group::type'))
   ->when(new IsEqual(Types::$OPEN), function($group) { return $group->name(); })
   ->when(new IsEqual(Types::$CLOSED), function($group) { return $group->name().' 🔒'; })
   ->otherwise(function($group) { return $group->name().' ('.$group->type()->name().')'; })
