@@ -78,7 +78,7 @@ class TypeOf extends Expression {
       $f= $this->otherwise;
       return $f($value, $this);
     } else {
-      throw new IllegalArgumentException('Unhandled type '.\xp::typeOf($expr));
+      throw new IllegalArgumentException('Unhandled type '.typeof($expr)->getName());
     }
   }
 }

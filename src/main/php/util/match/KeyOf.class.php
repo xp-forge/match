@@ -21,7 +21,7 @@ class KeyOf extends Expression {
     if (is_string($key) || is_int($key)) {
       $this->hash[$key]= self::$HANDLE->cast($function);
     } else {
-      throw new IllegalArgumentException('Illegal key type '.\xp::typeOf($key));
+      throw new IllegalArgumentException('Illegal key type '.typeof($key)->getName());
     }
     return $this;
   }
