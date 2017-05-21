@@ -6,7 +6,7 @@
   "description" : "Match DSL",
   "keywords": ["module", "xp"],
   "require" : {
-    "xp-framework/core": "~6.0",
+    "xp-framework/core": "^6.0|^7.0|^8.0",
     "php" : ">=5.4.0"
   },
   "require-dev" : {
